@@ -1,0 +1,96 @@
+@startuml erd-ecommerce.puml
+
+entity users{
+    user_id : number <<pk>> <<autonumber>>
+    --
+    *user_name : varchar(20)
+    *user_email : varchar(55)
+    *user_password : varchar(255)
+    user_birthdate : date
+    user_gender : varchar(6)
+    user_avatar : varchar(255)
+    user_type : varchar(10) [comments: admin | user]
+}
+
+entity products {
+    prod_id : number <<pk>> <<autonumber>>
+    --
+    *prod_name : varchar(100)
+    *prod_desc : varchar(3000)
+    *prod_price : number,
+    *prod_stock : integer,
+    *prod_expire : timestamp
+    *prod_weight : integer
+    prod_category : varchar(50) [comments : tv|hp|baju|...]
+    prod_brand : varchar(50)[comments:samsung|gucci|...]
+    prod_condition : varchar(15) [comments:new|second|refurbish]
+    prod_total_sold : integer [comments:jumlah terjual]
+    prod_rating : integer
+    prod_views : integer
+    --
+    prod_user_id : number <<fk>>
+}
+
+entity products_images{
+    prim_id : number <<pk>> <<autonumber>>
+    --
+    prim_filename : varchar(100)
+    prim_filesize : varchar(100) 
+    prim_filetype : varchar(100)
+    prim_primary : boolean [comments: primary image]
+    --
+    prim_prod_id : number<<fk>>
+}
+
+
+entity shopping_cart{
+    shop_id : number <<pk>> <<autonumber>>
+    --
+    shop_created_on : date
+    shop_status : varchar(15) [comments:open|closed]
+    --
+    shop_user_id : number <<fk>>
+}
+
+entity line_items {
+    lite_id : number <<pk>> <<autonumber>>
+    --
+    lite_qty : integer [comments:quantity ]
+    lite_status : varchar(15) [comments:cart|checkout|ordered]
+    --
+    lite_prod_id : number <<fk>>
+    lite_shop_id : number<<fk>>
+    lite_order_name : varchar(25) 
+    lite_subtotal : number
+    lite_price : number
+    --
+    lite_shop_id,lite_prod_id : <<uniquekey>>
+}
+
+ entity orders{
+    order_name : varchar(25) <<pk>>
+    --
+    order_created_on : timestamp
+    order_total_qty : integer [comments :  total semua dvd]
+    order_subtotal : integer [comments :  total tiap dvd]
+    order_discount : number [comments:jika > 2 dvd discount 5%]
+    order_tax : number [comments :  10%]
+    order_total_due : number [comments :  total semua dvd]
+    order_payt_trx_number : varchar(100) [comments : payment transaction number]
+    order_city : varchar(15) [comments : Jakarta|Bandung|Bogor|...]
+    order_address : varchar(500)
+    order_status : varchar(15)  [comments : open|cancelled|paid|shipping|closed]
+    --
+    order_user_id : number <<fk>>
+}
+
+users ||--|{ products
+products ||--|{ products_images
+products ||--|{ line_items
+users ||--|{ orders
+users ||--|{ shopping_cart
+shopping_cart ||--|{ line_items
+orders ||..|{ line_items
+
+
+@enduml

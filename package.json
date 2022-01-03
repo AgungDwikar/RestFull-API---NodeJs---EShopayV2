@@ -1,0 +1,44 @@
+{
+  "name": "nodejs-eshopay",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "development": "nodemon --exec babel-node ./server/index.js",
+    "clean": "rm -rf build && mkdir build",
+    "cleanw": "rmdir /S build && mkdir build",
+    "start": "node ./build/index.js",
+    "build-server": "babel -d ./build ./server -s",
+    "build": "npm run clean && npm run build-server",
+    "buildw": "npm run cleanw && npm run build-server",
+    "test": "jest",
+    "reverse:db": "sequelize-auto -o ./schemas -d eshopeyy -h localhost -u postgres -p 5432 -x ganbatte -e postgres"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-pino-logger": "^7.0.0",
+    "formidable": "^2.0.1",
+    "helmet": "^4.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "pg": "^8.7.1",
+    "pino-noir": "^2.2.1",
+    "sequelize": "^6.12.0-beta.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.16.7",
+    "@babel/core": "^7.12.13",
+    "@babel/node": "^7.12.13",
+    "@babel/plugin-transform-runtime": "^7.12.15",
+    "@babel/preset-env": "^7.12.13",
+    "nodemon": "^2.0.12",
+    "sequelize-auto": "^0.8.4"
+  }
+}
