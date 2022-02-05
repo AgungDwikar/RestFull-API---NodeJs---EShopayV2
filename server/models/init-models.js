@@ -15,38 +15,38 @@ import config from '../config/config'
 import configdb from '../config/config-heroku'
 
 // sequelez local di comment untuk deploy ke heroku
-// const sequelize = new Sequelize(
-//   config.db_name,
-//   config.db_username,
-//   config.db_password,
-//   {
-//     dialect : "postgres",
-//     pool : {
-//       max : 5,
-//       min : 0,
-//       acquire : 30000,
-//       idle : 10000
-//     }
-//   }
-// )
-
-const sequelize = new Sequelize(configdb.database, configdb.username, configdb.password, {
-  host: configdb.host,
-  dialect: configdb.dialect,
-  operatorsAliases: false,
-  dialectOptions: {
-    ssl: {
-      require: true, 
-      rejectUnauthorized: false 
+const sequelize = new Sequelize(
+  config.db_name,
+  config.db_username,
+  config.db_password,
+  {
+    dialect : "postgres",
+    pool : {
+      max : 5,
+      min : 0,
+      acquire : 30000,
+      idle : 10000
     }
-  },
-  pool: {
-    max: configdb.pool.max,
-    min: configdb.pool.min,
-    acquire: configdb.pool.acquire,
-    idle: configdb.pool.idle
   }
-});
+)
+
+// const sequelize = new Sequelize(configdb.database, configdb.username, configdb.password, {
+//   host: configdb.host,
+//   dialect: configdb.dialect,
+//   operatorsAliases: false,
+//   dialectOptions: {
+//     ssl: {
+//       require: true, 
+//       rejectUnauthorized: false 
+//     }
+//   },
+//   pool: {
+//     max: configdb.pool.max,
+//     min: configdb.pool.min,
+//     acquire: configdb.pool.acquire,
+//     idle: configdb.pool.idle
+//   }
+// });
 
 function initModels(sequelize) {
   const cart = _cart(sequelize, DataTypes);
@@ -60,8 +60,10 @@ function initModels(sequelize) {
 
   line_items.belongsTo(cart, { as: "lite_cart", foreignKey: "lite_cart_id"});
   cart.hasMany(line_items, { as: "line_items", foreignKey: "lite_cart_id"});
-  products.belongsTo(category, { as: "prod_cate", foreignKey: "prod_cate_id"});
-  category.hasMany(products, { as: "products", foreignKey: "prod_cate_id"});
+  // products.belongsTo(category, { as: "prod_cate", foreignKey: "prod_cate_id"});
+  // category.hasMany(products, { as: "products", foreignKey: "prod_cate_id"});
+  products.belongsTo(category, { foreignKey: "prod_cate_id"});
+  category.hasMany(products, {  foreignKey: "prod_cate_id"});
   products_images.belongsTo(products, { as: "prim_prod", foreignKey: "prim_prod_id"});
   products.hasMany(products_images, { as: "products_images", foreignKey: "prim_prod_id"});
   cart.belongsTo(users, { as: "cart_user", foreignKey: "cart_user_id"});
